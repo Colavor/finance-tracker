@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finance Tracker</title>
+  </head>
+
+  <body>
+    <div id="app">
+      <section id="balance">
+        <p>Баланс</p>
+        <span id="balance-counter">0</span>
+      </section>
+
+      <button type="button" id="addTransactionButton">
+        Добавить транзакцию
+      </button>
+
+      <section>
+        <h2>Транзакции</h2>
+        <div id="transactionsList"></div>
+      </section>
+
+      <div class="modal hidden" data-modal="transaction">
+        <div class="modal__content">
+          <button type="button" class="modal__close" id="closeTransactionModal">
+            ×
+          </button>
+          <form id="transactionForm">
+            <div>
+              <label>
+                Тип
+                <select name="type">
+                  <option value="expense">Расход</option>
+                  <option value="income">Доход</option>
+                </select>
+              </label>
+            </div>
+
+            <div>
+              <label>
+                Сумма
+                <input
+                  type="number"
+                  name="amount"
+                  min="0"
+                  placeholder="Введите сумму"
+                />
+              </label>
+            </div>
+
+            <div>
+              <label>
+                Категория
+                <select name="category">
+                  <option value="food">Еда</option>
+                  <option value="transport">Транспорт</option>
+                  <option value="entertainment">Развлечения</option>
+                  <option value="housing">Жильё</option>
+                  <option value="other">Другое</option>
+                </select>
+              </label>
+            </div>
+
+            <div>
+              <label>
+                Описание
+                <input type="text" name="description" />
+              </label>
+            </div>
+
+            <div>
+              <label>
+                Дата
+                <input type="date" name="date" />
+              </label>
+            </div>
+
+            <button type="submit">Добавить</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

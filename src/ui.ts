@@ -1,0 +1,96 @@
+import type { Transaction } from "./types";
+import { getElement } from "./utils";
+
+const transactionsList = getElement<HTMLDivElement>("#transactionsList");
+
+export function createTransactionElement(
+  transaction: Transaction,
+): HTMLElement {
+  const element = document.createElement("div");
+  element.className = "transaction";
+  element.dataset.transactionId = String(transaction.id);
+
+  const type = document.createElement("h4");
+  const category = document.createElement("p");
+  const amount = document.createElement("span");
+  const description = document.createElement("span");
+  const date = document.createElement("span");
+
+  type.textContent = getTransactionTypeLabel(transaction.type);
+  category.textContent = getCategoryLabel(transaction.category);
+  description.textContent = transaction.description ?? "Без описания";
+  amount.textContent = String(transaction.amount);
+  date.textContent = formatDate(transaction.date);
+
+  const editBtn = document.createElement("button");
+  editBtn.textContent = "Edit";
+  editBtn.classList.add("edit-btn");
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Delete";
+  deleteBtn.classList.add("delete-btn");
+
+  const info = document.createElement("div");
+  info.className = "transaction__info";
+
+  const actions = document.createElement("div");
+  actions.className = "transaction__actions";
+
+  info.append(type, category, amount, description, date);
+
+  actions.append(editBtn, deleteBtn);
+
+  element.append(info, actions);
+
+  return element;
+}
+
+function getTransactionTypeLabel(type: Transaction["type"]): string {
+  return type === "income" ? "Доход" : "Расход";
+}
+
+function getCategoryLabel(category: Transaction["category"]): string {
+  switch (category) {
+    case "food":
+      return "Еда";
+
+    case "transport":
+      return "Транспорт";
+
+    case "entertainment":
+      return "Развлечения";
+
+    case "housing":
+      return "Жильё";
+
+    case "other":
+      return "Другое";
+
+    default:
+      throw new Error("Неизвестная категория");
+  }
+}
+
+export function addTransactionElement(transaction: Transaction): void {
+  transactionsList.append(createTransactionElement(transaction));
+}
+
+export function removeTransactionElement(id: Transaction["id"]): void {
+  const element = transactionsList.querySelector<HTMLElement>(
+    `[data-transaction-id="${id}"]`,
+  );
+
+  element?.remove();
+}
+
+export function openModal(modal: HTMLElement): void {
+  modal.classList.remove("hidden");
+}
+
+export function closeModal(modal: HTMLElement): void {
+  modal.classList.add("hidden");
+}
+
+function formatDate(date: Transaction["date"]): string {
+  return new Date(date).toLocaleDateString("ru-RU");
+}
