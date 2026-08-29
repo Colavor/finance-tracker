@@ -2,6 +2,7 @@ import type { Transaction } from "./types";
 import { getElement } from "./utils";
 
 const transactionsList = getElement<HTMLDivElement>("#transactionsList");
+const balanceCounter = getElement<HTMLSpanElement>("#balance-counter");
 
 export function createTransactionElement(
   transaction: Transaction,
@@ -89,8 +90,30 @@ export function openModal(modal: HTMLElement): void {
 
 export function closeModal(modal: HTMLElement): void {
   modal.classList.add("hidden");
+
+  const form = modal.querySelector<HTMLFormElement>("form");
+
+  form?.reset();
 }
 
 function formatDate(date: Transaction["date"]): string {
   return new Date(date).toLocaleDateString("ru-RU");
+}
+
+export function updateBalance(balance: number): void {
+  balanceCounter.textContent = String(balance);
+}
+
+export function updateTransactionElement(transaction: Transaction): void {
+  const element = transactionsList.querySelector(
+    `[data-transaction-id="${transaction.id}"]`,
+  );
+
+  if (!(element instanceof HTMLElement)) {
+    throw new Error("Не найден элемент транзакции");
+  }
+
+  const newElement = createTransactionElement(transaction);
+
+  element.replaceWith(newElement);
 }

@@ -1,6 +1,7 @@
 import type { Transaction } from "./types";
+import { loadTransactions, saveTransactions } from "./storage";
 
-const transactions: Transaction[] = [];
+const transactions: Transaction[] = loadTransactions();
 
 export function createTransaction(data: Omit<Transaction, "id">): Transaction {
   const transaction: Transaction = {
@@ -13,6 +14,7 @@ export function createTransaction(data: Omit<Transaction, "id">): Transaction {
 
 export function addTransaction(transaction: Transaction): void {
   transactions.push(transaction);
+  saveTransactions(transactions);
 }
 
 export function deleteTransaction(id: number): void {
@@ -20,6 +22,7 @@ export function deleteTransaction(id: number): void {
 
   if (index !== -1) {
     transactions.splice(index, 1);
+    saveTransactions(transactions);
   }
 }
 
@@ -33,4 +36,12 @@ export function calculateBalance(): number {
 
 export function getTransactions(): Transaction[] {
   return [...transactions];
+}
+
+export function updateTransaction(
+  transaction: Transaction,
+  data: Omit<Transaction, "id">,
+): void {
+  Object.assign(transaction, data);
+  saveTransactions(transactions);
 }

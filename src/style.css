@@ -1,3 +1,341 @@
-.hidden {
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #e5e7eb;
+
+  background:
+    radial-gradient(circle at 20% 20%, #263b68 0, transparent 35%),
+    radial-gradient(circle at 80% 80%, #35235f 0, transparent 35%), #0f172a;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+#app {
+  width: min(900px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 50px 0;
+}
+
+/* Balance */
+
+#balance {
+  padding: 30px;
+  margin-bottom: 20px;
+
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+}
+
+#balance p {
+  margin: 0 0 8px;
+
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+#balance-counter {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+/* Add button */
+
+#addTransactionButton {
+  width: 100%;
+  margin-bottom: 35px;
+  padding: 15px 20px;
+
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+
+  background: rgba(59, 130, 246, 0.75);
+  color: white;
+
+  font-weight: 600;
+
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+
+#addTransactionButton:hover {
+  background: rgba(59, 130, 246, 0.9);
+  transform: translateY(-1px);
+}
+
+/* Transactions */
+
+section h2 {
+  margin: 0 0 16px;
+  font-size: 22px;
+}
+
+#transactionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.transaction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  padding: 20px;
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.2s;
+}
+
+.transaction:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.transaction__info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+}
+
+.transaction__info h4,
+.transaction__info p,
+.transaction__info span {
+  margin: 0;
+}
+
+.transaction__info h4 {
+  font-size: 16px;
+}
+
+.transaction__info p {
+  color: #94a3b8;
+}
+
+.transaction__actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Transaction buttons */
+
+.edit-btn,
+.delete-btn {
+  padding: 8px 12px;
+
+  border-radius: 8px;
+  background: transparent;
+
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+
+.edit-btn {
+  border: 1px solid rgba(96, 165, 250, 0.5);
+  color: #93c5fd;
+}
+
+.edit-btn:hover {
+  background: rgba(59, 130, 246, 0.15);
+}
+
+.delete-btn {
+  border: 1px solid rgba(248, 113, 113, 0.5);
+  color: #fca5a5;
+}
+
+.delete-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* Modal */
+
+.modal {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(2, 6, 23, 0.75);
+}
+
+.modal.hidden {
   display: none;
+}
+
+.modal__content {
+  position: relative;
+
+  width: min(450px, 100%);
+  padding: 30px;
+
+  background: rgba(20, 30, 55, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
+}
+
+/* Close button */
+
+.modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  width: 32px;
+  height: 32px;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.06);
+  color: #cbd5e1;
+
+  font-size: 22px;
+  line-height: 1;
+
+  transition: background 0.2s;
+}
+
+.modal__close:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Form */
+
+#transactionForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#transactionForm > div {
+  display: flex;
+  flex-direction: column;
+}
+
+#transactionForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  color: #cbd5e1;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+#transactionForm input,
+#transactionForm select {
+  width: 100%;
+  padding: 11px 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9px;
+
+  outline: none;
+
+  background: rgba(255, 255, 255, 0.06);
+  color: #f1f5f9;
+
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+
+#transactionForm input::placeholder {
+  color: #64748b;
+}
+
+#transactionForm input:focus,
+#transactionForm select:focus {
+  border-color: rgba(96, 165, 250, 0.7);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+#transactionForm select option {
+  background: #1e293b;
+  color: #f1f5f9;
+}
+
+#transactionForm button[type="submit"] {
+  margin-top: 4px;
+  padding: 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9px;
+
+  background: rgba(59, 130, 246, 0.75);
+  color: white;
+
+  font-weight: 600;
+
+  transition: background 0.2s;
+}
+
+#transactionForm button[type="submit"]:hover {
+  background: rgba(59, 130, 246, 0.9);
+}
+
+/* Mobile */
+
+@media (max-width: 650px) {
+  #app {
+    width: calc(100% - 20px);
+    padding: 25px 0;
+  }
+
+  .transaction {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .transaction__info {
+    flex-wrap: wrap;
+    gap: 10px 16px;
+  }
+
+  .transaction__actions {
+    width: 100%;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    flex: 1;
+  }
 }
