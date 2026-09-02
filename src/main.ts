@@ -6,6 +6,8 @@ import {
   calculateBalance,
   getTransactions,
   updateTransaction,
+  calculateTotal,
+  calculateExpensesByCategory,
 } from "./transactions";
 
 import {
@@ -15,6 +17,7 @@ import {
   closeModal,
   updateBalance,
   updateTransactionElement,
+  updateStatistics,
 } from "./ui";
 
 import type { Transaction } from "./types";
@@ -47,8 +50,17 @@ function refreshBalance(): void {
   updateBalance(calculateBalance());
 }
 
+function refreshStatistics(): void {
+  updateStatistics(
+    calculateTotal("income"),
+    calculateTotal("expense"),
+    calculateExpensesByCategory(),
+  );
+}
+
 const transactionsChanged = new Signal();
 transactionsChanged.subscribe(() => refreshBalance());
+transactionsChanged.subscribe(() => refreshStatistics());
 
 function handleTransactionSubmit(event: SubmitEvent): void {
   event.preventDefault();
@@ -189,3 +201,4 @@ transactionsList.addEventListener("click", handleTransactionClick);
 
 getTransactions().forEach(addTransactionElement);
 refreshBalance();
+refreshStatistics();

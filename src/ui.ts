@@ -117,3 +117,27 @@ export function updateTransactionElement(transaction: Transaction): void {
 
   element.replaceWith(newElement);
 }
+
+export function updateStatistics(
+  income: number,
+  expenses: number,
+  expensesByCategory: Record<Transaction["category"], number>,
+): void {
+  const totalIncome = getElement<HTMLSpanElement>("#total-income");
+  const totalExpenses = getElement<HTMLSpanElement>("#total-expenses");
+
+  const food = getElement<HTMLSpanElement>("#category-food");
+  const transport = getElement<HTMLSpanElement>("#category-transport");
+  const entertainment = getElement<HTMLSpanElement>("#category-entertainment");
+  const housing = getElement<HTMLSpanElement>("#category-housing");
+  const other = getElement<HTMLSpanElement>("#category-other");
+
+  totalIncome.textContent = String(income);
+  totalExpenses.textContent = String(expenses);
+
+  food.textContent = String(expensesByCategory.food);
+  transport.textContent = String(expensesByCategory.transport);
+  entertainment.textContent = String(expensesByCategory.entertainment);
+  housing.textContent = String(expensesByCategory.housing);
+  other.textContent = String(expensesByCategory.other);
+}

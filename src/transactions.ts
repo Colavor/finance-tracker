@@ -45,3 +45,33 @@ export function updateTransaction(
   Object.assign(transaction, data);
   saveTransactions(transactions);
 }
+
+//f for statistics
+export function calculateTotal(type: Transaction["type"]): number {
+  return transactions.reduce(
+    (acc, transaction) =>
+      transaction.type === type ? acc + transaction.amount : acc,
+    0,
+  );
+}
+
+export function calculateExpensesByCategory(): Record<
+  Transaction["category"],
+  number
+> {
+  return transactions.reduce(
+    (acc, transaction) => {
+      if (transaction.type === "expense") {
+        acc[transaction.category] += transaction.amount;
+      }
+      return acc;
+    },
+    {
+      food: 0,
+      transport: 0,
+      entertainment: 0,
+      housing: 0,
+      other: 0,
+    },
+  );
+}
