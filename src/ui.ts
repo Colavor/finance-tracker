@@ -1,5 +1,5 @@
 import type { Transaction } from "./types";
-import { getElement } from "./utils";
+import { getElement, formatMoney } from "./utils";
 
 const transactionsList = getElement<HTMLDivElement>("#transactionsList");
 const balanceCounter = getElement<HTMLSpanElement>("#balance-counter");
@@ -20,7 +20,7 @@ export function createTransactionElement(
   type.textContent = getTransactionTypeLabel(transaction.type);
   category.textContent = getCategoryLabel(transaction.category);
   description.textContent = transaction.description ?? "Без описания";
-  amount.textContent = String(transaction.amount);
+  amount.textContent = formatMoney(transaction.amount);
   date.textContent = formatDate(transaction.date);
 
   const editBtn = document.createElement("button");
@@ -122,6 +122,7 @@ export function updateStatistics(
   income: number,
   expenses: number,
   expensesByCategory: Record<Transaction["category"], number>,
+  categoryPercentages: Record<Transaction["category"], number>,
 ): void {
   const totalIncome = getElement<HTMLSpanElement>("#total-income");
   const totalExpenses = getElement<HTMLSpanElement>("#total-expenses");
@@ -132,12 +133,38 @@ export function updateStatistics(
   const housing = getElement<HTMLSpanElement>("#category-housing");
   const other = getElement<HTMLSpanElement>("#category-other");
 
-  totalIncome.textContent = String(income);
-  totalExpenses.textContent = String(expenses);
+  const foodPercent = getElement<HTMLSpanElement>("#category-food-percent");
+  const transportPercent = getElement<HTMLSpanElement>(
+    "#category-transport-percent",
+  );
+  const entertainmentPercent = getElement<HTMLSpanElement>(
+    "#category-entertainment-percent",
+  );
+  const housingPercent = getElement<HTMLSpanElement>(
+    "#category-housing-percent",
+  );
+  const otherPercent = getElement<HTMLSpanElement>("#category-other-percent");
 
-  food.textContent = String(expensesByCategory.food);
-  transport.textContent = String(expensesByCategory.transport);
-  entertainment.textContent = String(expensesByCategory.entertainment);
-  housing.textContent = String(expensesByCategory.housing);
-  other.textContent = String(expensesByCategory.other);
+  totalIncome.textContent = formatMoney(income);
+  totalExpenses.textContent = formatMoney(expenses);
+
+  food.textContent = formatMoney(expensesByCategory.food);
+  transport.textContent = formatMoney(expensesByCategory.transport);
+  entertainment.textContent = formatMoney(expensesByCategory.entertainment);
+  housing.textContent = formatMoney(expensesByCategory.housing);
+  other.textContent = formatMoney(expensesByCategory.other);
+
+  foodPercent.textContent = `${categoryPercentages.food.toFixed(0)}%`;
+  transportPercent.textContent = `${categoryPercentages.transport.toFixed(0)}%`;
+  entertainmentPercent.textContent = `${categoryPercentages.entertainment.toFixed(0)}%`;
+  housingPercent.textContent = `${categoryPercentages.housing.toFixed(0)}%`;
+  otherPercent.textContent = `${categoryPercentages.other.toFixed(0)}%`;
+}
+
+export function renderTransactions(transactions: Transaction[]): void {
+  transactionsList.replaceChildren();
+
+  transactions.forEach((transaction) => {
+    addTransactionElement(transaction);
+  });
 }

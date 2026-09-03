@@ -8,6 +8,8 @@ import {
   updateTransaction,
   calculateTotal,
   calculateExpensesByCategory,
+  searchTransactions,
+  calculateCategoryPercentages,
 } from "./transactions";
 
 import {
@@ -18,6 +20,7 @@ import {
   updateBalance,
   updateTransactionElement,
   updateStatistics,
+  renderTransactions,
 } from "./ui";
 
 import type { Transaction } from "./types";
@@ -45,6 +48,7 @@ const transactionModal = getElement<HTMLDivElement>(
   '[data-modal="transaction"]',
 );
 const transactionsList = getElement<HTMLDivElement>("#transactionsList");
+const searchInput = getElement<HTMLInputElement>("#searchInput");
 
 function refreshBalance(): void {
   updateBalance(calculateBalance());
@@ -55,6 +59,7 @@ function refreshStatistics(): void {
     calculateTotal("income"),
     calculateTotal("expense"),
     calculateExpensesByCategory(),
+    calculateCategoryPercentages(),
   );
 }
 
@@ -185,6 +190,15 @@ function getTodayDate(): string {
 function setDefaultDate(): void {
   dateInput.value = getTodayDate();
 }
+
+function handleSearchInput(): void {
+  const query = searchInput.value;
+  const filteredTransactions = searchTransactions(query);
+
+  renderTransactions(filteredTransactions);
+}
+
+searchInput.addEventListener("input", handleSearchInput);
 
 addTransactionButton.addEventListener("click", () => {
   setDefaultDate();

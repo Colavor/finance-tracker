@@ -75,3 +75,39 @@ export function calculateExpensesByCategory(): Record<
     },
   );
 }
+
+export function calculateCategoryPercentages(): Record<
+  Transaction["category"],
+  number
+> {
+  const expensesByCategory = calculateExpensesByCategory();
+  const totalExpenses = calculateTotal("expense");
+
+  if (totalExpenses === 0) {
+    return { food: 0, transport: 0, entertainment: 0, housing: 0, other: 0 };
+  }
+
+  return {
+    food: (expensesByCategory.food / totalExpenses) * 100,
+    transport: (expensesByCategory.transport / totalExpenses) * 100,
+    entertainment: (expensesByCategory.entertainment / totalExpenses) * 100,
+    housing: (expensesByCategory.housing / totalExpenses) * 100,
+    other: (expensesByCategory.other / totalExpenses) * 100,
+  };
+}
+
+export function searchTransactions(query: string): Transaction[] {
+  const normilizedQuery = query.toLocaleLowerCase().trim();
+
+  return transactions.filter((transaction) => {
+    const description = transaction.description?.toLowerCase() ?? "";
+    const amount = String(transaction.amount);
+    const category = transaction.category.toLowerCase();
+
+    return (
+      description.includes(normilizedQuery) ||
+      amount.includes(normilizedQuery) ||
+      category.includes(normilizedQuery)
+    );
+  });
+}

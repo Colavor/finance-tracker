@@ -76,3 +76,7 @@ export function getOptionalFormValue(
 
   return trimmedValue === "" ? undefined : trimmedValue;
 }
+
+export function formatMoney(amount: number): string {
+  return amount.toLocaleString("ru-Ru") + "P";
+}
